@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load rest_framework %}
+{% if user.is_authenticated %}
+<h1>Welcome {{user.username}}</h1>
+{% if wallet %}
+Wallet balance : {{wallet.balance| floatformat:2}}
+{% endif %}
+
+<table>
+    
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Cr/Dr</th>
+        <th>Balance</th>
+        <th>Status</th>
+        <th>Remarks</th>
+    </tr>
+    {% if sent %}
+   {% for i in sent %}
+    <tr>
+        <td>{{i.timestamp}}</td>
+        <td>{{i.amount| floatformat:2}}</td>
+        <td>"Debit"</td>
+        <td>{{i.sender_wallet | floatformat:2 }}</td>
+        <td> Sent to {{i.receiver.username}}</td>
+        <td>Charges for sending {{i.amount | floatformat:2 }} to {{i.receiver.username}} is {{i.sender_charges| floatformat:2}}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    {% if received %}
+{% for i in received %}
+    <tr>
+        <td>{{i.timestamp}}</td>
+        <td>{{i.amount | floatformat:2}}</td>
+        <td>"Credit"</td>
+        <td>{{i.receiver_wallet| floatformat:2 }}</td>
+        <td> Received from {{i.sender.username}}</td>
+        <td>Charges for receiving {{i.amount}} from {{i.receiver.username}} is {{i.sender_charges| floatformat:2}}</td>
+    </tr>
+    {% endfor %}
+{% endif %}
+</table>
+
+    <a href="{% url 'logout' %}">Logout</a>
+    {% endif %}
+    {% endblock %}

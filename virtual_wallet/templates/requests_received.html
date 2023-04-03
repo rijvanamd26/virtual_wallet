@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Welcome {{user.username}}</h1>
+    {% if requests %}
+     <table>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Requested by</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        {% for i in requests %}
+        <tr>
+          <td>{{i.timestamp}}</td>
+          <td>{{i.amount}}</td>
+          <td>{{i.req_by.username}}</td>
+          <td>{{i.status}}</td>
+          <td>
+            {% if i.status == 'Pending' %}
+            <form action="{% url 'accept_req' i.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Accept">
+            </form>
+            <form action="{% url 'deny_req_status' i.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Deny">
+            </form>
+            {% elif i.status == 'Accepted' %}
+            <form action="{% url 'accept_req' i.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Continue">
+            </form>
+            <form action="{% url 'deny_req_status' i.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Deny">
+            </form>
+            {% elif i.status == 'Denied' %}
+            N/A
+            {% elif i.status == 'Completed' %}
+            N/A
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a href="{% url 'logout' %}">Logout</a>
+
+    {% endif %}
+    {% endif %}
+    
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Send money</h1>
+<form action="{% url 'accept_req_status' data.id %}" method="post">
+    {% csrf_token %}
+    Username : <input type="text" name="username" value="{{data.req_by.username}}" readonly><br>
+    Amount : <input type="number" name="amount" value="{{data.amount}}" readonly><br>
+    <input type="submit" value="Send money">
+</form>
+<a href="{% url 'logout' %}">Logout</a>
+{% endblock %}

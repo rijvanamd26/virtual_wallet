@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Request money</h1>
+<form action="{% url 'request_money' %}" method="post">
+    {% csrf_token %}
+    Username : <input type="text" name="username"><br>
+    Amount : <input type="number" name="amount" ><br>
+    <input type="submit" value="Request money">
+</form>
+<a href="{% url 'logout' %}">Logout</a>
+{% endblock %}
